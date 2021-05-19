@@ -7,7 +7,7 @@ TYPE
             Height, Width: INTEGER
          END;
   TPers = RECORD
-            I, J, Steps: INTEGER;
+            I, J, Steps: INTEGER
           END;
 VAR
   Score: ARRAY[1..10000] OF INTEGER;
@@ -44,11 +44,9 @@ BEGIN
               Pers.Steps := 0
             END
         END;
-
       READLN(F)
     END;
-
-  CLOSE(F);
+  CLOSE(F)
 END;
 
 PROCEDURE DrawLabirint(VAR T: INTEGER; VAR Lab: TLab; VAR Pers: TPers; VAR GameStatus: BOOLEAN);
@@ -59,7 +57,7 @@ BEGIN
   THEN
     BEGIN
       GOTOXY(1, 1);
-      WRITELN('Game on! ');
+      WRITELN('Game on! ')
     END
   ELSE
     BEGIN
@@ -72,7 +70,7 @@ BEGIN
       WHILE CountW <= T DO
         BEGIN
           WRITELN('YOUR ', CountW, ' SCORE: ', SCORE[CountW]);
-          CountW := CountW + 1;
+          CountW := CountW + 1
         END;
       T := T + 1;
       WHILE GameStatus = TRUE
@@ -87,30 +85,30 @@ BEGIN
                 GameStatus := FALSE;
                 clrscr();
                 InitLabirint(Lab, Pers);
-                DrawLabirint(T, Lab, Pers, GameStatus);
+                DrawLabirint(T, Lab, Pers, GameStatus)
               END; 
             IF (Ch = #27)
             THEN
               BEGIN
                 GameStatus := FALSE;
                 EscLab := TRUE;
-                clrscr();
-              END;
-          END;
+                clrscr()
+              END
+          END
     END;
-      GOTOXY(1, 2);
-      WRITELN('STEPS: ', Pers.Steps);
-      GOTOXY(1, 3);
-      FOR I := 1 TO Lab.Height
-      DO
-        BEGIN
-          GOTOXY(1, I + 3);
-          FOR J := 1 TO Lab.Width
-          DO
-            BEGIN
-              IF Lab.Cells[I, J] = '2'
-              THEN
-                WRITE(CHR(1));
+    GOTOXY(1, 2);
+    WRITELN('STEPS: ', Pers.Steps);
+    GOTOXY(1, 3);
+    FOR I := 1 TO Lab.Height
+    DO
+      BEGIN
+        GOTOXY(1, I + 3);
+        FOR J := 1 TO Lab.Width
+        DO
+          BEGIN
+            IF Lab.Cells[I, J] = '2'
+            THEN
+              WRITE(CHR(1));
               IF Lab.Cells[I, J] = '1'
               THEN
                 BEGIN
@@ -121,15 +119,13 @@ BEGIN
               IF Lab.Cells[I, J] = '0'
               THEN
                 WRITE(' ');
-
-              TEXTCOLOR(15);
-              TEXTBACKGROUND(0)
-            END
-        END
+                TEXTCOLOR(15);
+                TEXTBACKGROUND(0)
+              END
+          END 
     END;
 
-
-PROCEDURE MoveMan(Ch: CHAR; VAR Pers: TPers);
+PROCEDURE MovePers(Ch: CHAR; VAR Pers: TPers);
 BEGIN
   IF ((Ch = #115) OR (Ch = #83) OR (Ch = #219) OR (Ch = #251) OR (Ch = #80)) AND (Lab.Cells[Pers.I + 1, Pers.J] = '0') AND (Pers.I < Lab.Height) {S 115}
   THEN
@@ -185,40 +181,27 @@ BEGIN
   InitLabirint(Lab, Pers);
   DrawLabirint(T, Lab, Pers, GameStatus);
   sndPlaySound('newbackg_2.wav', snd_Async or snd_NoDefault);
+
   REPEAT
     WHILE KeyPressed
     DO
       Ch := ReadKey;
-
     IF Ch = #27
     THEN
-    BEGIN
       EscLab := TRUE;
-    END;
-
     IF Ch <> #0
     THEN
       BEGIN 
         IF (NOT GameStatus) AND (Ch IN [#9, #75, #72, #77, #80, #97, #65, #244, #212, #115, #83, #219, #251, #100, #68, #194, #226, #119, #87, #246, #214])
         THEN
           BEGIN
-            MoveMan(Ch, Pers);
+            MovePers(Ch, Pers);
             GameStatus := (Pers.I = Lab.Height) OR (Pers.J = Lab.Width) OR (Pers.I = 1) OR (Pers.J = 1);
             DrawLabirint(T, Lab, Pers, GameStatus)
           END;
-
-      Ch := #0
+        Ch := #0
       END;
 
   UNTIL EscLab;
-  {DrawLabirint(Lab, Pers, GameStatus);}
-  clrscr();
+  clrscr()
 END.
-
-
-
-
-
-
-
-
